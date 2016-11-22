@@ -1,5 +1,5 @@
 #block-islandora-usage-stats-usage-views .usage-group {
-  font-size: 11px;
+  font-size: 16px;
   font-weight: 700;
   list-style: none;
 }
@@ -16,7 +16,7 @@
 #block-islandora-usage-stats-usage-views .usage-group .usage-group-item span {
   background: #fff;
   border: 1px solid #aaa;
-  padding: 0px 4px 1px;
+  padding: 2px 4px;
   position: relative;
 }
 
@@ -45,4 +45,7 @@
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
   border-right: 4px solid #FFF;
+}
+#block-islandora-usage-stats-usage-views .item-list {
+  margin-top:10px;
 }
