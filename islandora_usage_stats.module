@@ -166,6 +166,9 @@ function islandora_usage_stats_block_view($delta = '') {
       $object = islandora_object_load($row->pid);
       $view_suffix = ((int) $row->views > 1) ? 'views' : 'view';
       $viewcount = "$row->views $view_suffix";
+      if (!isset($object->label)) {
+        $object->label = "";
+      }
       $items[] = array(
         'data' => l($object->label, "islandora/object/{$row->pid}") . "<span class='label label-default'>$viewcount</span>",
         'class' => array(
