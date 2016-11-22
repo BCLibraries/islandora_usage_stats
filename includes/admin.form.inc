@@ -44,6 +44,25 @@ function islandora_usage_stats_admin_form() {
     '#default_value' => variable_get('islandora_usage_stats_exclude_bots', '1'),
   );
 
+  $form['threshold'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Minimum Display Threshold'),
+  );
+
+  $form['threshold']['islandora_usage_stats_view_threshold'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Minimum Views'),
+    '#description' => t('The minimum number of object views before displaying this number in the usage views block.'),
+    '#default_value' => variable_get('islandora_usage_stats_view_threshold', '1'),
+  );
+
+  $form['threshold']['islandora_usage_stats_download_threshold'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Minimum Downloads'),
+    '#description' => t('The minimum number of object downloads before displaying this number in the usage views block.'),
+    '#default_value' => variable_get('islandora_usage_stats_download_threshold', '1'),
+  );
+
   $form['clear'] = array(
     '#type' => 'fieldset',
     '#title' => t('Clear values'),
@@ -177,6 +196,8 @@ function islandora_usage_stats_admin_form_submit($form, &$form_state) {
     default:
       variable_set('islandora_usage_stats_ip_list', $form_state['values']['islandora_usage_stats_ip_list']);
       variable_set('islandora_usage_stats_cooldown_seconds', $form_state['values']['islandora_usage_stats_cooldown_seconds']);
+      variable_set('islandora_usage_stats_view_threshold', $form_state['values']['islandora_usage_stats_view_threshold']);
+      variable_set('islandora_usage_stats_download_threshold', $form_state['values']['islandora_usage_stats_download_threshold']);
       variable_set('islandora_usage_stats_exclude_bots', $form_state['values']['islandora_usage_stats_exclude_bots']);
       drupal_set_message(
         t("The configuration options have been saved.")
