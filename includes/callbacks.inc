@@ -31,3 +31,18 @@ function islandora_usage_stats_track_downloads(AbstractDatastream $datastream) {
   islandora_usage_stats_log_datastream_download($datastream->parent->id, $datastream->id);
   islandora_download_datastream($datastream);
 }
+
+/**
+ * Menu alter replacement callback for PDF ds view.
+ *
+ * @param AbstractDatastream $datastream
+ *   The datastream being viewed.
+ */
+function islandora_usage_stats_track_pdf_datastreams(AbstractDatastream $datastream) {
+  module_load_include('inc', 'islandora', 'includes/datastream');
+  module_load_include('inc', 'islandora_usage_stats', 'includes/utilities');
+  if (strcmp($datastream->id, "PDF") === 0) {
+    islandora_usage_stats_log_datastream_download($datastream->parent->id, $datastream->id, FALSE);
+  }
+  islandora_view_datastream($datastream, FALSE, NULL);
+}

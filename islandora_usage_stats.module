@@ -314,10 +314,11 @@ function islandora_usage_stats_block_view($delta = '') {
     $downloads = islandora_usage_stats_get_datastream_downloads_count($pid);
     
     // If data is screwy, set it to zero
+    // This was originally set to look for 'OBJ' but we want 'PDF'
     if ( !is_array($downloads) || 
-         !array_key_exists('OBJ', $downloads) || 
-         !is_numeric($downloads['OBJ'])) {
-      $downloads['OBJ'] = 0;
+         !array_key_exists('PDF', $downloads) || 
+         !is_numeric($downloads['PDF'])) {
+      $downloads['PDF'] = 0;
     }
     
     $items = array();
@@ -328,8 +329,8 @@ function islandora_usage_stats_block_view($delta = '') {
     );
 
     $items[] = array(
-      'data' => 'Downloads : '. $downloads['OBJ'],
-      'data' => "<span class=\"banner\">Downloads</span><span class=\"counter\">{$downloads['OBJ']}</span>",
+      'data' => 'Downloads : '. $downloads['PDF'],
+      'data' => "<span class=\"banner\">Downloads</span><span class=\"counter\">{$downloads['PDF']}</span>",
       'class' => array('usage-group-item')
     );
     
@@ -445,6 +446,17 @@ function islandora_usage_stats_menu_alter(&$items) {
   $items['islandora/search']['page callback'] = 'islandora_usage_stats_track_search_results';
   $items['islandora/search']['file'] = $path;
   $items['islandora/search']['module'] = "islandora_usage_stats";
+
+  //Adding callback for all datastreams
+  //We are looking specifically for
+  //    islandora/object/%islandora_object/datastream/PDF/view
+  $items['islandora/object/%islandora_object/datastream/%islandora_datastream']['page callback']
+    = 'islandora_usage_stats_track_pdf_datastreams';
+  $items['islandora/object/%islandora_object/datastream/%islandora_datastream']['file']
+    = $path;
+  $items['islandora/object/%islandora_object/datastream/%islandora_datastream']['module']
+    = "islandora_usage_stats";
+
   $items['islandora/object/%islandora_object/datastream/%islandora_datastream/download']['page callback']
     = 'islandora_usage_stats_track_downloads';
   $items['islandora/object/%islandora_object/datastream/%islandora_datastream/download']['file']
