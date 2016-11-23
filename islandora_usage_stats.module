@@ -340,18 +340,28 @@ function islandora_usage_stats_block_view($delta = '') {
     $total_views = $views + $legacy_data_result->legacy_views;
     $total_downloads = $downloads['PDF'] + $legacy_data_result->legacy_downloads;
     
+    $display_usage_views = FALSE;
     $items = array();
     
-    $items[] = array(
-      'data' => "<span class=\"banner\">Views</span><span class=\"counter\">{$total_views}</span>",
-      'class' => array('usage-group-item')
-    );
-
-    $items[] = array(
-      'data' => 'Downloads : '. $total_downloads,
-      'data' => "<span class=\"banner\">Downloads</span><span class=\"counter\">{$total_downloads}</span>",
-      'class' => array('usage-group-item')
-    );
+    if ($total_views >= variable_get('islandora_usage_stats_view_threshold', 1)) {
+      $display_usage_views = TRUE;
+      $items[] = array(
+        'data' => "<span class=\"banner\">Views</span><span class=\"counter\">{$total_views}</span>",
+        'class' => array('usage-group-item')
+      );
+    }
+    if ($total_downloads >= variable_get('islandora_usage_stats_download_threshold', 1)) {
+      $display_usage_views = TRUE;
+      $items[] = array(
+        'data' => 'Downloads : '. $total_downloads,
+        'data' => "<span class=\"banner\">Downloads</span><span class=\"counter\">{$total_downloads}</span>",
+        'class' => array('usage-group-item')
+      );
+    }
+    if (!$display_usage_views) {
+      //In case neither number reaches the display threshold then don't return anything.
+      return;
+    }
     
     return array(
       'content' => array(
