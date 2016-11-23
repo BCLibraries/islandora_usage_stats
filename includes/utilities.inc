@@ -41,7 +41,7 @@ function islandora_usage_stats_log_object_view(AbstractObject $object) {
 /**
  * Logs the download of a datastream.
  */
-function islandora_usage_stats_log_datastream_download($pid, $dsid) {
+function islandora_usage_stats_log_datastream_download($pid, $dsid, $count_as_view = TRUE) {
   // Check if user's ip is excluded.
   if (!islandora_usage_stats_should_not_log()) {
     module_load_include('inc', 'islandora_usage_stats', 'includes/utilities');
@@ -50,7 +50,9 @@ function islandora_usage_stats_log_datastream_download($pid, $dsid) {
     // Check if user has requested this item in the past X seconds.
     if (($last_viewed + variable_get('islandora_usage_stats_cooldown_seconds', 300)) < REQUEST_TIME) {
       module_load_include('inc', 'islandora_usage_stats', 'includes/db');
-      islandora_usage_stats_log_object_view(islandora_object_load($pid));
+      if ($count_as_view) {
+        islandora_usage_stats_log_object_view(islandora_object_load($pid));
+      }
       $ds_dsid = islandora_usage_stats_get_ds_dsid($pid, $dsid);
       islandora_usage_stats_datastream_download_to_db($ds_dsid);
       islandora_usage_stats_session_datastream_last_viewed_time($pid, $dsid, REQUEST_TIME);
