@@ -319,17 +319,33 @@ function islandora_usage_stats_block_view($delta = '') {
          !is_numeric($downloads['OBJ'])) {
       $downloads['OBJ'] = 0;
     }
+
+    //Get the legacy views from the db
+    $legacy_data = islandora_usage_stats_get_legacy_data($pid);
+    
+    //If array is empty then set to zero 
+    if(empty($legacy_data)){
+        $legacy_data_result->legacy_downloads = 0;
+        $legacy_data_result->legacy_views = 0;
+    } else { 
+      //To simplify our work, pick the first element of the single-element array
+      //We are guaranteed to have a single-element array due to our db query
+      $legacy_data_result = $legacy_data[0];
+    }
+
+    $total_views = $views + $legacy_data_result->legacy_views;
+    $total_downloads = $downloads['OBJ'] + $legacy_data_result->legacy_downloads;
     
     $items = array();
     
     $items[] = array(
-      'data' => "<span class=\"banner\">Views</span><span class=\"counter\">{$views}</span>",
+      'data' => "<span class=\"banner\">Views</span><span class=\"counter\">{$total_views}</span>",
       'class' => array('usage-group-item')
     );
 
     $items[] = array(
-      'data' => 'Downloads : '. $downloads['OBJ'],
-      'data' => "<span class=\"banner\">Downloads</span><span class=\"counter\">{$downloads['OBJ']}</span>",
+      'data' => 'Downloads : '. $total_downloads,
+      'data' => "<span class=\"banner\">Downloads</span><span class=\"counter\">{$total_downloads}</span>",
       'class' => array('usage-group-item')
     );
     
@@ -399,6 +415,7 @@ function islandora_usage_stats_islandora_object_purged($pid) {
     'islandora_usage_stats_object_ds_access_log',
     'islandora_usage_stats_objects',
     'islandora_usage_stats_datastreams',
+    'islandora_usage_stats_legacy_data',
   );
   foreach ($purge_tables as $table) {
     islandora_usage_stats_clear_tracking($table, $pid);

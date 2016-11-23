@@ -251,6 +251,33 @@ function islandora_usage_stats_schema() {
     ),
     'primary key' => array('id'),
   );
+  $schema['islandora_usage_stats_legacy_data'] = array(
+    'description' => 'Used to store legacy stats data.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+      ),
+      'pid' => array(
+        'description' => 'The pid of the object.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'legacy_views' => array(
+        'description' => 'The legacy usage views for this item.',
+        'type' => 'int',
+        'not NULL' => TRUE,
+        'default' => 0,
+      ),
+      'legacy_downloads' => array(
+        'description' => 'The legacy usage downloads for this item.',
+        'type' => 'int',
+        'not NULL' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
   return $schema;
 }
 
@@ -669,4 +696,40 @@ function islandora_usage_stats_update_7005() {
       ),
     )
   );
+}
+
+/**
+ * Adding legacy stats table
+ */
+function islandora_usage_stats_update_7006() {
+  $schema['islandora_usage_stats_legacy_data'] = array(
+    'description' => 'Used to store legacy stats data.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+      ),
+      'pid' => array(
+        'description' => 'The pid of the object.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'legacy_views' => array(
+        'description' => 'The legacy usage views for this item.',
+        'type' => 'int',
+        'not NULL' => TRUE,
+        'default' => 0,
+      ),
+      'legacy_downloads' => array(
+        'description' => 'The legacy usage downloads for this item.',
+        'type' => 'int',
+        'not NULL' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  db_create_table('islandora_usage_stats_legacy_data', $schema['islandora_usage_stats_legacy_data']);
+  return t('Updated database to support legacy data.');
 }

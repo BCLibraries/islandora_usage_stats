@@ -395,6 +395,26 @@ function islandora_usage_stats_get_individual_object_view_count($pid) {
 }
 
 /**
+ * Helper function to retrieve the legacy views for an object. 
+ * In case of multiple entries for a pid this function selects the first entry.
+ *
+ * @param string $pid
+ *   The PID of the object to get view count stats for.
+ *
+ * @return array
+ *   An array with two keys, 'legacy_views' and 'legacy_downloads' and the legacy views the object has had.
+ */
+function islandora_usage_stats_get_legacy_data($pid) {
+  $query = db_select('islandora_usage_stats_legacy_data', 'ld');
+  $query->condition('pid', $pid, '=');
+  $query->fields('ld', array('legacy_views', 'legacy_downloads'));
+  $query->range(0, 1);
+
+  $records = $query->execute()->fetchAll();
+  return $records;
+}
+
+/**
  * Helper function to retrieve the amount of downloads of datastreams.
  *
  * @param string $pid
