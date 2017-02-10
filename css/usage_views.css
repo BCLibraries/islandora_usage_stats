@@ -13,6 +13,17 @@
   margin-left: 0;
 }
 
+#block-islandora-usage-stats-usage-views .usage-group .usage-group-item.last {
+  display:list-item;
+  margin: 30px 0px -30px 0px;
+}
+
+#block-islandora-usage-stats-usage-views .usage-group .usage-group-item .disclaimer {
+  border:none;
+  font-size:smaller;
+  padding-left:0px;
+}
+
 #block-islandora-usage-stats-usage-views .usage-group .usage-group-item span {
   background: #fff;
   border: 1px solid #aaa;

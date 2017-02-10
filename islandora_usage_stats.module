@@ -361,7 +361,11 @@ function islandora_usage_stats_block_view($delta = '') {
     if (!$display_usage_views) {
       //In case neither number reaches the display threshold then don't return anything.
       return;
-    }
+    } else {
+      $items[] = array(
+      'data' => "<span class=\"disclaimer\"><a href='/help#stats'>How statistics are collected.</a></span>",
+      'class' => array('usage-group-item')
+    );
     
     return array(
       'content' => array(
