@@ -363,9 +363,10 @@ function islandora_usage_stats_block_view($delta = '') {
       return;
     } else {
       $items[] = array(
-      'data' => "<span class=\"disclaimer\"><a href='/help#stats'>How statistics are collected.</a></span>",
-      'class' => array('usage-group-item')
-    );
+        'data' => "<span class=\"disclaimer\"><a href='/help#stats'>How statistics are collected.</a></span>",
+        'class' => array('usage-group-item')
+      );
+    }
     
     return array(
       'content' => array(
