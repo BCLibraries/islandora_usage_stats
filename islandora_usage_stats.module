@@ -329,6 +329,7 @@ function islandora_usage_stats_block_view($delta = '') {
     
     //If array is empty then set to zero 
     if(empty($legacy_data)){
+        $legacy_data_result = new stdClass();
         $legacy_data_result->legacy_downloads = 0;
         $legacy_data_result->legacy_views = 0;
     } else { 
