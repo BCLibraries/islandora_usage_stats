@@ -21,12 +21,20 @@ function islandora_usage_stats_admin_form() {
   $form['usage'] = array(
     '#type' => 'fieldset',
     '#title' => t('Omit IPs'),
-    '#description' => t('Add IP addresses that you want to omit from usage tracking'),
+    '#description' => t('Add IP addresses and <a target="_blank" href="@cidr-link">CIDR ranges</a> that you want to omit from usage tracking',
+      array(
+        '@cidr-link' => 'https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing',
+      )
+    ),
   );
 
   $form['usage']['islandora_usage_stats_ip_list'] = array(
     '#type' => 'textarea',
-    '#description' => t('Add IPs separated by spaces'),
+    '#description' => t('Add IPs or <a target="_blank" href="@cidr-link">CIDR ranges</a> separated by spaces',
+      array(
+        '@cidr-link' => 'https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing',
+      )
+    ),
     '#default_value' => variable_get('islandora_usage_stats_ip_list', 'localhost 127.0.0.1'),
   );
 
@@ -44,23 +52,12 @@ function islandora_usage_stats_admin_form() {
     '#default_value' => variable_get('islandora_usage_stats_exclude_bots', '1'),
   );
 
-  $form['threshold'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Minimum Display Threshold'),
-  );
-
-  $form['threshold']['islandora_usage_stats_view_threshold'] = array(
+  $form['usage']['islandora_usage_stats_exclude_bots_regex'] = array(
     '#type' => 'textfield',
-    '#title' => t('Minimum Views'),
-    '#description' => t('The minimum number of object views before displaying this number in the usage views block.'),
-    '#default_value' => variable_get('islandora_usage_stats_view_threshold', '1'),
-  );
-
-  $form['threshold']['islandora_usage_stats_download_threshold'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Minimum Downloads'),
-    '#description' => t('The minimum number of object downloads before displaying this number in the usage views block.'),
-    '#default_value' => variable_get('islandora_usage_stats_download_threshold', '1'),
+    '#title' => t('Bot Exclusion Regex'),
+    '#description' => t('The regular expression used to filter out bots'),
+    '#default_value' => variable_get('islandora_usage_stats_exclude_bots_regex', '/bot|rambler|spider|crawl|slurp|curl|^$/i'),
+    '#maxlength' => 256,
   );
 
   $form['clear'] = array(
@@ -199,6 +196,7 @@ function islandora_usage_stats_admin_form_submit($form, &$form_state) {
       variable_set('islandora_usage_stats_view_threshold', $form_state['values']['islandora_usage_stats_view_threshold']);
       variable_set('islandora_usage_stats_download_threshold', $form_state['values']['islandora_usage_stats_download_threshold']);
       variable_set('islandora_usage_stats_exclude_bots', $form_state['values']['islandora_usage_stats_exclude_bots']);
+      variable_set('islandora_usage_stats_exclude_bots_regex', $form_state['values']['islandora_usage_stats_exclude_bots_regex']);
       drupal_set_message(
         t("The configuration options have been saved.")
       );
